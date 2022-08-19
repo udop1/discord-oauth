@@ -17,7 +17,7 @@ passport.deserializeUser(async (id, done) => {
         var getUserId = function() {
             let promise = new Promise(function(resolve, reject) {
                 setTimeout(function() {
-                    mysql.query("SELECT user_id FROM tbl_Users WHERE user_id = " + mysql.escape(id) + " LIMIT 1", function(error, result) {
+                    mysql.query("SELECT * FROM tbl_Users WHERE user_id = " + mysql.escape(id) + " LIMIT 1", function(error, result) {
                         if (error) throw error;
                         //console.log(result);
                         resolve(result[0]);
@@ -41,7 +41,7 @@ passport.use(
     new Strategy({
         clientID: clientID,
         clientSecret: clientSecret,
-        callbackURL: `http://localhost:${port}/api/v1/auth/discord/redirect`,
+        callbackURL: `http://localhost:${port}/api/auth/discord/redirect`,
         scope: ['identify'],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -63,6 +63,25 @@ passport.use(
                 return promise;
             }
             var discordUser = await getDiscordUser();
+
+            var updateDiscordUser = function() {
+                let promise = new Promise(function(resolve, reject) {
+                    setTimeout(function() {
+                        mysql.query("UPDATE tbl_Users SET username = " + mysql.escape(profile.username) + ", discriminator = " + mysql.escape(profile.discriminator) + ", avatar = " + mysql.escape(profile.avatar) + " WHERE user_id = " + mysql.escape(profile.id), function(error, result) {
+                            if (error) throw error;
+                            //console.log(result);
+                            resolve(result[0]);
+                        });
+                    }, 1000);
+                });
+                return promise;
+            }
+
+            //Avoiding unnecessary changes to DB
+            if (discordUser.username != profile.username || discordUser.discriminator != profile.discriminator || discordUser.avatar != profile.avatar) { 
+                await updateDiscordUser();
+                discordUser = await getDiscordUser();
+            }
             
             if (discordUser) {
                 console.log(`Found user: ${JSON.stringify(discordUser)}`);
@@ -71,7 +90,7 @@ passport.use(
                 var createDiscordUser = function() {
                     let promise = new Promise(function(resolve, reject) {
                         setTimeout(function() {
-                            mysql.query("INSERT INTO tbl_Users (user_id) VALUES (" + mysql.escape(profile.id) + ")", function(error, result) {
+                            mysql.query("INSERT INTO tbl_Users (user_id, username, discriminator, avatar) VALUES (" + mysql.escape(profile.id) + ", " + mysql.escape(profile.username) + ", " + mysql.escape(profile.discriminator) + ", " + mysql.escape(profile.avatar) + ")", function(error, result) {
                                 if (error) throw error;
                                 //console.log(result);
                                 resolve(result[0]);

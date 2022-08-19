@@ -27,6 +27,9 @@ app.use(cookieParser());
 app.use(
     session({
         secret: sessionSecret,
+        cookie: {
+            maxAge: 86400000 //1 Day
+        },
         resave: false,
         saveUninitialized: false,
         store: sessionStore,
@@ -41,6 +44,6 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/api/v1/auth', authRoute);
+app.use('/api/auth', authRoute);
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));

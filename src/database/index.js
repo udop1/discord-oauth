@@ -5,7 +5,8 @@ const mysql = MySQL.createConnection({
     host: `${host}`,
     user: `${user}`,
     password: `${password}`,
-    database: `${database}`
+    database: `${database}`,
+    charset: 'utf8mb4'
 });
 
 module.exports.mysql = mysql;
