@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const MySQLStore = require('express-mysql-session')(session);
@@ -19,6 +20,11 @@ var sessionStore = new MySQLStore({
     password: `${password}`,
     database: `${database}`
 });
+
+app.use(cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
