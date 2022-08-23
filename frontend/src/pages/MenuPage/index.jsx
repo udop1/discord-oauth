@@ -2,6 +2,7 @@ import React from "react";
 import { getUserDetails } from "../../utils/api";
 
 export function MenuPage({ history }) {
+    //eslint-disable-next-line no-unused-vars
     const [user, setUser] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
 
@@ -19,7 +20,7 @@ export function MenuPage({ history }) {
     }, [history, setUser]);
     
     return !loading && (
-        <div>
+        <div className="container">
             <h1>Menu Page</h1>
         </div>
     );

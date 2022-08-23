@@ -13,7 +13,7 @@ export function LandingPage(props) {
                     <h1>Login with Discord</h1>
                 </div>
                 <div>
-                    <Button variant="contained" sx={{ width: 200, marginTop: 10 }} onClick={login}>Login</Button>
+                    <Button variant="contained" sx={{ width: "50%", minWidth: 200, marginTop: 10 }} onClick={login}>Login</Button>
                 </div>
             </div>
         </div>
