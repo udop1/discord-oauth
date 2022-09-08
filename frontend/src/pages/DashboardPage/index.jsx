@@ -1,4 +1,6 @@
 import React from "react";
+import './index.css';
+//import { Button, SvgIcon } from '@mui/material';
 import { getUserDetails } from "../../utils/api";
 
 export function DashboardPage({ history }) {

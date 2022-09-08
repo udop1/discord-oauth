@@ -1,5 +1,5 @@
 import React from "react";
-import '../index.css';
+import './index.css';
 import { Button, SvgIcon } from '@mui/material';
 import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
 
