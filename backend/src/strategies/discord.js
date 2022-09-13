@@ -5,7 +5,7 @@ const { Strategy } = require('passport-discord');
 
 passport.serializeUser((user, done) => {
     console.log('Serializing user...');
-    console.log(user);
+    //console.log(user);
     done(null, user.user_id);
 });
 
@@ -29,10 +29,10 @@ passport.deserializeUser(async (id, done) => {
         var user = await getUserId();
 
         if (!user) throw new Error('User not found');
-        console.log(user);
+        //console.log(user);
         done(null, user);
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         done(error, null);
     }
 });
@@ -78,7 +78,7 @@ passport.use(
             }
 
             //Avoiding unnecessary changes to DB
-            if (discordUser.username != profile.username || discordUser.discriminator != profile.discriminator || discordUser.avatar != profile.avatar) { 
+            if (!discordUser || discordUser.username != profile.username || discordUser.discriminator != profile.discriminator || discordUser.avatar != profile.avatar) { 
                 await updateDiscordUser();
                 discordUser = await getDiscordUser();
             }
@@ -105,7 +105,7 @@ passport.use(
                 return done(null, newUser);
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             return done(error, null);
         }
     })
